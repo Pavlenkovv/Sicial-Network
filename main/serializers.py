@@ -17,6 +17,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostEditSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Post
         fields = '__all__'

@@ -1,12 +1,13 @@
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 from rest_framework import generics, viewsets, response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from django.db.models.functions import TruncDate
-from django.db.models import Count
 
 from main.models import Post, Like
 from main.permissions import IsOwnerOrReadOnly
-from main.serializers import PostEditSerializer, PostListSerializer, PostSerializer, LikeAnalyticsView
+from main.serializers import PostEditSerializer, PostListSerializer, PostSerializer, \
+    LikeAnalyticsView
 
 
 class PostCreateView(generics.CreateAPIView):
@@ -57,12 +58,9 @@ class LikeAnalyticsView(generics.ListAPIView):
         highest_date = '2100-01-01'
         start_date = self.request.GET.get('date_from', lowest_date)
         end_date = self.request.GET.get('date_to', highest_date)
-        queryset = Like.objects\
-            .filter(creation_date__gte=start_date, creation_date__lte=end_date)\
+        queryset = Like.objects \
+            .filter(creation_date__gte=start_date, creation_date__lte=end_date) \
             .annotate(date=TruncDate('creation_date')) \
-            .values('date')\
+            .values('date') \
             .annotate(likes=Count('id'))
         return queryset
-
-
-
