@@ -9,7 +9,13 @@ class PostListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PostDetailSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
+class PostEditSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = Post
@@ -17,6 +23,9 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 
 class LikeAnalyticsView(serializers.ModelSerializer):
+    date = serializers.DateField()
+    likes = serializers.IntegerField()
+
     class Meta:
         model = Like
-        fields = '__all__'
+        fields = ('date', 'likes')
